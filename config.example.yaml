@@ -1,0 +1,66 @@
+# ─────────────────────────────────────────────────────────────
+#  Example config. Copy it to config.yaml and edit your copy:
+#      cp config.example.yaml config.yaml
+#  After editing, just run the scraper again.
+# ─────────────────────────────────────────────────────────────
+
+search:
+  # Cities to search. Each has a name + the site-specific IDs.
+  # (WG-Gesucht city IDs were looked up live: Wiesbaden=135, Mainz=84)
+  cities:
+    - name: Wiesbaden
+      wg_gesucht_id: 135
+      kleinanzeigen_id: 4897        # "Wiesbaden - Hessen"
+      immoscout_path: hessen/wiesbaden
+    - name: Mainz
+      wg_gesucht_id: 84
+      kleinanzeigen_id: 5315        # "Mainz - Rheinland-Pfalz"
+      immoscout_path: rheinland-pfalz/mainz
+
+  # ---- HARD filters (a listing is dropped if it fails these) ----
+  max_kaltmiete: 1700      # € cold rent ceiling
+  min_rooms: 3             # at least this many rooms
+  min_sqm: null            # null = no minimum living space
+
+  # ---- SOFT filters (never auto-hide; shown + flagged in the UI) ----
+  # Dogs must be allowed, BUT listings often say "nach Vereinbarung"
+  # or leave it blank — so we only DROP listings that EXPLICITLY forbid pets.
+  dogs_required: true
+
+  # Move-in window (informational flag for now; not a hard drop)
+  move_in_from: "2027-01-01"
+  move_in_to:   "2027-03-31"
+
+# Words in a listing that mean pets are explicitly forbidden -> hard drop
+pet_forbidden_phrases:
+  - "keine haustiere"
+  - "keine tiere"
+  - "keine hunde"
+  - "haustiere nicht erlaubt"
+  - "no pets"
+
+# ─────────────────────────────────────────────────────────────
+#  YOUR DETAILS for the application emails.  EDIT THESE.
+#  The draft generator fills the listing-specific bits automatically.
+# ─────────────────────────────────────────────────────────────
+applicant:
+  # Who is applying (shown in the intro)
+  household: "wir (zwei Erwachsene) mit einem Hund"
+  # Your jobs + income reassurance (landlords care about this a lot)
+  occupation: "Wir sind beide fest angestellt und haben ein sicheres Einkommen."
+  # Pets sentence (leave empty "" if you have no pets)
+  pets: "Unser Hund ist ruhig und gut erzogen."
+  # Non-smoker / SCHUFA reassurance (optional, strong signals for German landlords)
+  extras: "Wir sind Nichtraucher und können eine SCHUFA-Auskunft sowie Einkommensnachweise vorlegen."
+  # How they can reach you
+  contact_email: "you@example.com"
+  contact_phone: ""            # optional, e.g. "0151 00000000"
+  # Your name for the signature
+  signature: "Max Mustermann"
+  language: "de"               # "de" (recommended) or "en"
+
+# Politeness / anti-block settings (keep these gentle)
+scraping:
+  pages_per_city: 2        # how many result pages to fetch per city (20 listings/page)
+  min_delay_seconds: 2.0   # random pause between requests
+  max_delay_seconds: 4.0

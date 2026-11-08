@@ -1,0 +1,22 @@
+<div class="draft-panel">
+  <div class="draft-head">
+    <span class="draft-label">✉ Application draft</span>
+    <button class="btn dclose" onclick="this.closest('.draft-panel').innerHTML=''">✕</button>
+  </div>
+  <label class="draft-field">
+    <span>Subject</span>
+    <input class="draft-subject" value="{{ d.subject }}" readonly onclick="this.select()">
+  </label>
+  <label class="draft-field">
+    <span>Message</span>
+    <textarea class="draft-body" rows="14" readonly onclick="this.select()">{{ d.body }}</textarea>
+  </label>
+  <div class="draft-actions">
+    <button class="btn copybtn" data-target="body"
+      onclick="const t=this.closest('.draft-panel').querySelector('.draft-body');t.select();navigator.clipboard.writeText(t.value);this.textContent='✓ Copied message';setTimeout(()=>this.textContent='📋 Copy message',1500)">📋 Copy message</button>
+    <button class="btn copybtn"
+      onclick="const t=this.closest('.draft-panel').querySelector('.draft-subject');navigator.clipboard.writeText(t.value);this.textContent='✓ Copied subject';setTimeout(()=>this.textContent='📋 Copy subject',1500)">📋 Copy subject</button>
+    <a class="btn open-listing" href="{{ l.url }}" target="_blank" rel="noopener">↗ Open listing to send</a>
+  </div>
+  <p class="draft-hint">Review, tweak if you like, copy, then paste into the listing's contact form. Personalize the wording in <code>config.yaml</code> → <code>applicant</code>.</p>
+</div>

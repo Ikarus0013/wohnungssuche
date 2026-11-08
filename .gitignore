@@ -1,0 +1,33 @@
+# OS / editor
+.DS_Store
+.claude/
+.idea/
+.vscode/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Personal config (copy config.example.yaml to config.yaml)
+config.yaml
+
+# Runtime data
+listings.db
+*.db
+*.sqlite
+
+# Logged-in Chrome profile for ImmoScout24 (cookies, sessions)
+.is24_profile/
+
+# Private planning notes
+PLAN.md

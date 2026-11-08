@@ -1,0 +1,11 @@
+{% if listings %}
+<div class="count">{{ listings|length }} listing(s)</div>
+<div class="grid">
+  {% for l in listings %}{% include "_card.html" %}{% endfor %}
+</div>
+{% else %}
+<div class="empty">
+  <p>No listings match these filters.</p>
+  <p class="hint">Try widening the filters, or hit <b>Scrape now</b> to fetch fresh listings.</p>
+</div>
+{% endif %}

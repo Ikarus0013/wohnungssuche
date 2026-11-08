@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wohnungssuche — Wiesbaden & Mainz</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/htmx.min.js"></script>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <h1>🏠 Wohnungssuche</h1>
+    <span class="sub">Wiesbaden &amp; Mainz · 4+ rooms · ≤ €1700 · dog-friendly</span>
+  </div>
+  <div class="head-actions">
+    {% if last_run %}<span class="lastrun">last scrape: found {{ last_run.found }}, kept {{ last_run.kept }}</span>{% endif %}
+    <button class="btn scrape" hx-post="/scrape" hx-target="#grid" hx-swap="innerHTML"
+            hx-indicator="#spin">⟳ Scrape now</button>
+    <span id="spin" class="htmx-indicator">scraping…</span>
+  </div>
+</header>
+
+<form id="filters" hx-get="/listings" hx-target="#grid" hx-swap="innerHTML"
+      hx-trigger="change, submit">
+  <label>City
+    <select name="city">
+      <option value="all">All</option>
+      {% for c in cities %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+    </select>
+  </label>
+  <label>Status
+    <select name="status">
+      <option value="new" selected>New</option>
+      <option value="viewed">Viewed</option>
+      <option value="applied">Applied</option>
+      <option value="hidden">Hidden</option>
+      <option value="all">All</option>
+    </select>
+  </label>
+  <label>Min rooms <input type="number" name="min_rooms" min="1" step="1" style="width:4rem"></label>
+  <label>Max € <input type="number" name="max_price" min="0" step="50" style="width:6rem"></label>
+  <label class="cb"><input type="checkbox" name="hide_temp" value="true"> hide temporary</label>
+  <label class="cb"><input type="checkbox" name="hide_furnished" value="true"> hide furnished</label>
+  <label class="cb"><input type="checkbox" name="hide_wg" value="true"> hide WG</label>
+</form>
+
+<main id="grid">
+  {% include "_grid.html" %}
+</main>
+</body>
+</html>

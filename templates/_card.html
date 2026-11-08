@@ -1,0 +1,40 @@
+{% macro num(v, suffix='') -%}
+{%- if v is not none -%}{{ '%0.0f'|format(v) }}{{ suffix }}{%- else -%}—{%- endif -%}
+{%- endmacro -%}
+<div class="card status-{{ l.status }}" id="card-{{ l.source_id }}">
+  <div class="card-img">
+    {% if l.image_url %}<img src="{{ l.image_url }}" alt="" loading="lazy">
+    {% else %}<div class="noimg">no photo</div>{% endif %}
+    <span class="source-badge">{{ l.source.replace('_',' ') }}</span>
+  </div>
+  <div class="card-body">
+    <div class="facts">
+      <span class="rooms">{{ num(l.rooms) }} Zi</span>
+      <span class="price">{{ num(l.price_cold, ' €') }}<small>kalt</small></span>
+      <span class="size">{{ num(l.size_sqm, ' m²') }}</span>
+    </div>
+    <a class="title" href="{{ l.url }}" target="_blank" rel="noopener">{{ l.title }}</a>
+    <div class="loc">{{ l.city }}{% if l.district %} · {{ l.district }}{% endif %}{% if l.address %} · {{ l.address }}{% endif %}</div>
+    <div class="meta">
+      <span class="chip pets-{{ l.pets }}">🐾 {{ l.pets }}</span>
+      <span class="chip">📅 {{ l.available_from or '?' }}</span>
+      {% for t in l.tag_list %}<span class="chip tag tag-{{ t }}">{{ t }}</span>{% endfor %}
+    </div>
+    <div class="actions">
+      {% set nexts = {'new':'viewed','viewed':'applied'} %}
+      <button hx-post="/listing/{{ l.uid }}/status" hx-vals='{"value":"viewed"}'
+              hx-target="#card-{{ l.source_id }}" hx-swap="outerHTML"
+              class="btn {% if l.status=='viewed' %}on{% endif %}">👁 Viewed</button>
+      <button hx-post="/listing/{{ l.uid }}/status" hx-vals='{"value":"applied"}'
+              hx-target="#card-{{ l.source_id }}" hx-swap="outerHTML"
+              class="btn applied {% if l.status=='applied' %}on{% endif %}">✅ Applied</button>
+      <button hx-post="/listing/{{ l.uid }}/status" hx-vals='{"value":"hidden"}'
+              hx-target="#card-{{ l.source_id }}" hx-swap="outerHTML"
+              class="btn ghost">✕ Hide</button>
+      <span class="status-pill">{{ status_labels[l.status] }}</span>
+    </div>
+    <button class="btn draftbtn" hx-get="/listing/{{ l.uid }}/draft"
+            hx-target="#draft-{{ l.source_id }}" hx-swap="innerHTML">✉ Draft email</button>
+    <div class="draft-slot" id="draft-{{ l.source_id }}"></div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+# Phase 1 (scraping) + Phase 2 (web UI) dependencies
+httpx>=0.27
+beautifulsoup4>=4.12
+lxml>=5.2
+pyyaml>=6.0
+
+# Web UI (Phase 2)
+fastapi>=0.111
+uvicorn[standard]>=0.30
+jinja2>=3.1
+
+# ImmoScout24 (headed Google Chrome via Playwright)
+playwright>=1.44
